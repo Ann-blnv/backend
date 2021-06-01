@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class ArtistController {
@@ -45,7 +46,7 @@ public class ArtistController {
 
     @PutMapping("/artists/{id}")
     public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId,
-                                                 @Validated @RequestBody Artist artistDetails) {
+                                               @Validated @RequestBody Artist artistDetails) {
         Artist artist = null;
         Optional<Artist> cc = artistRepository.findById(artistId);
         if (cc.isPresent()) {

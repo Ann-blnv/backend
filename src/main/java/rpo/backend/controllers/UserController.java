@@ -1,7 +1,10 @@
 package rpo.backend.controllers;
 
+import rpo.backend.models.Artist;
+import rpo.backend.models.Country;
 import rpo.backend.models.Museum;
 import rpo.backend.models.User;
+import rpo.backend.repositories.CountryRepository;
 import rpo.backend.repositories.MuseumRepository;
 import rpo.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
@@ -67,7 +71,7 @@ public class UserController {
 
     @PostMapping("/users/{id}/removemuseums")
     public ResponseEntity<Object> removeMuseums(@PathVariable(value = "id") Long userId,
-                                             @Validated @RequestBody Set<Museum> museums) {
+                                                @Validated @RequestBody Set<Museum> museums) {
         Optional<User> uu = userRepository.findById(userId);
         int cnt = 0;
         if (uu.isPresent()) {
@@ -85,7 +89,7 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
-                                                 @Validated @RequestBody User userDetails) {
+                                           @Validated @RequestBody User userDetails) {
         User user = null;
         Optional<User> cc = userRepository.findById(userId);
         if (cc.isPresent()) {

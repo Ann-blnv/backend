@@ -13,6 +13,26 @@ class BackendService {
     logout() {
         return axios.get (`${AUTH_URL}/logout`)
     }
+
+    retrieveAllCountries() {
+        return axios.get(`${API_URL}/countries`);
+    }
+
+    retrieveCountry(id) {
+        return axios.get(`${API_URL}/countries/${id}`);
+    }
+
+    createCountry(country) {
+        return axios.post(`${API_URL}/countries`, country);
+    }
+
+    updateCountry(country) {
+        return axios.put(`${API_URL}/countries/${country.id}`, country);
+    }
+
+    deleteCountries(countries) {
+        return axios.post(`${API_URL}/deletecountries`, countries);
+    }
 }
 
 function showError(msg) {
@@ -35,13 +55,13 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use ( undefined,
     error => {
-    if (error.response && error.response.status && [401, 403].indexOf(error.response.status) !== -1)
-        showError("Ошибка авторизации")
-    else if (error.response && error.response.data && error.response.data.message)
-        showError(error.response.data.message)
-    else
-        showError(error.message)
-    return Promise.reject(error);
+        if (error.response && error.response.status && [401, 403].indexOf(error.response.status) !== -1)
+            showError("Ошибка авторизации")
+        else if (error.response && error.response.data && error.response.data.message)
+            showError(error.response.data.message)
+        else
+            showError(error.message)
+        return Promise.reject(error);
     }
 )
 

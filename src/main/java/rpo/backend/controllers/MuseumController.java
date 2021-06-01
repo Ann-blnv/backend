@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class MuseumController {
@@ -42,7 +43,7 @@ public class MuseumController {
 
     @PutMapping("/museums/{id}")
     public ResponseEntity<Museum> updateMuseum(@PathVariable(value = "id") Long museumId,
-                                           @Validated @RequestBody Museum museumDetails) {
+                                               @Validated @RequestBody Museum museumDetails) {
         Museum museum = null;
         Optional<Museum> cc = museumRepository.findById(museumId);
         if (cc.isPresent()) {
