@@ -21,6 +21,6 @@ public class Country {
     @Column(name = "name", nullable = false, unique = true)
     public String name;
 
-    @OneToMany(mappedBy = "country")
-    public List<rpo.backend.models.Artist> artists = new ArrayList<rpo.backend.models.Artist>();
+//    @OneToMany(mappedBy = "country")
+//    public List<rpo.backend.models.Artist> artists = new ArrayList<>();
 }

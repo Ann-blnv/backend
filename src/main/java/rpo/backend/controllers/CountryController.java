@@ -2,14 +2,15 @@ package rpo.backend.controllers;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import rpo.backend.models.Artist;
 import rpo.backend.models.Country;
 import rpo.backend.repositories.CountryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -17,13 +18,14 @@ import java.util.*;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
+
 public class CountryController {
     @Autowired
     CountryRepository countryRepository;
 
     @GetMapping("/countries")
-    public List<Country> getAllCountries() {
-        return countryRepository.findAll();
+    public Page<Country> getAllCountries(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return countryRepository.findAll(PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "name")));
     }
 
     @GetMapping("/countries/{id}")
@@ -35,18 +37,12 @@ public class CountryController {
         return ResponseEntity.ok(country);
     }
 
-    @GetMapping("/countries/{id}/artists")
-    public ResponseEntity<List<Artist>> getCountryArtists(@PathVariable(value = "id") Long countryId) {
-        Optional<Country> cc = countryRepository.findById(countryId);
-        return cc.map(country -> ResponseEntity.ok(country.artists)).orElseGet(() -> ResponseEntity.ok(new ArrayList<>()));
-    }
-
     @PostMapping("/countries")
-    public ResponseEntity<?> createCountry(@Validated @RequestBody Country country)
+    public ResponseEntity<Object> createCountry(@Valid @RequestBody Country country)
             throws DataValidationException {
         try {
             Country nc = countryRepository.save(country);
-            return new ResponseEntity<Country>(nc, HttpStatus.OK);
+            return new ResponseEntity<Object>(nc, HttpStatus.OK);
         }
         catch (Exception ex) {
             String error;

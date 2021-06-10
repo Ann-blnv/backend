@@ -1,7 +1,8 @@
 package rpo.backend.auth;
 
-import rpo.backend.repositories.UserRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -12,10 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.stereotype.Component;
+import rpo.backend.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Qualifier
 @Component
 public class AuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
@@ -32,8 +35,7 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
     }
 
     @Override
-    protected UserDetails retrieveUser(String userName,
-                                       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
+    protected UserDetails retrieveUser(String userName, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
         Object token = usernamePasswordAuthenticationToken.getCredentials();
         Optional<rpo.backend.models.User> uu = userRepository.findByToken(String.valueOf(token));
         if (uu.isEmpty())

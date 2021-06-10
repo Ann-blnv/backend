@@ -1,5 +1,9 @@
 package rpo.backend.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import rpo.backend.models.Country;
 import rpo.backend.models.Museum;
 import rpo.backend.repositories.MuseumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +23,13 @@ public class MuseumController {
     MuseumRepository museumRepository;
 
     @GetMapping("/museums")
-    public List<Museum> getAllMuseums() {
-        return museumRepository.findAll();
+    public Page<Museum> getAllMuseums(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return museumRepository.findAll(PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "name")));
     }
-
+//    @GetMapping("/countries")
+//    public Page<Country> getAllCountries(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+//        return countryRepository.findAll(PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "name")));
+//    }
     @PostMapping("/museums")
     public ResponseEntity<?> createMuseum(@Validated @RequestBody Museum museum) {
         try {

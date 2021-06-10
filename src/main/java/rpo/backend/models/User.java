@@ -7,14 +7,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "users")
 @Access(AccessType.FIELD)
 public class User {
 
-    public User() { }
-    public User(Long id) { this.id = id; }
+    public User() {}
+    public User(Long id) {this.id = id;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,16 +23,19 @@ public class User {
     @Column(name = "login", nullable = false, unique = true)
     public String login;
 
-    @JsonIgnore
-    @Column(name = "password")
-    public String password;
-
     @Column(name = "email", nullable = false, unique = true)
     public String email;
 
     @JsonIgnore
+    @Column(name = "password")
+    public String password;
+
+    @JsonIgnore
     @Column(name = "salt")
     public String salt;
+
+    @Transient
+    public String np;
 
     @Column(name = "token")
     public String token;
@@ -49,7 +51,7 @@ public class User {
         m.users.add(this);
     }
 
-    public void removeMuseum(Museum m) {
+    public void removeMuseum(Museum m){
         this.museums.remove(m);
         m.users.remove(this);
     }
